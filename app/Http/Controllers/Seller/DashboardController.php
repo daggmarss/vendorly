@@ -73,7 +73,7 @@ class DashboardController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'store_name' => 'required|string|max:255|unique:sellers,store_name',
+            'store_name' => 'required|string|max:255',
             'store_description' => 'required|string|max:1000',
         ]);
 

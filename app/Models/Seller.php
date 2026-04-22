@@ -19,7 +19,7 @@ class Seller extends Model
         'store_banner',
         'status',
         'rejection_reason',
-        'commision_rate',
+        'commission_rate',
         'business_info'
     ];
 
@@ -27,7 +27,7 @@ class Seller extends Model
     {
         return [
             'business_info' => 'array',
-            'commision_rate' => 'decimal:2'
+            'commission_rate' => 'decimal:2'
         ];
     }
 

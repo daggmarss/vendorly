@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('store_banner')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected', 'suspended'])->default('pending');
             $table->text('rejection_reason')->nullable();
-            $table->decimal('commision_rate', 5, 2)->default(5.00);
+            $table->decimal('commission_rate', 5, 2)->default(5.00);
             $table->json('business_info')->nullable();
             $table->timestamps();
 
