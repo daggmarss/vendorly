@@ -30,6 +30,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/choose-role', function () {
+    return Inertia::render('Auth/RoleSelection');
+})->name('role.selection');
+
 
 Route::get('/dashboard', function () {
     $user = Auth::user();

@@ -27,7 +27,16 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@fontsource-variable/geist": "^5.2.8",
+        "@radix-ui/react-label": "^2.1.8",
+        "@radix-ui/react-slot": "^1.2.4",
         "@types/recharts": "^1.8.29",
-        "recharts": "^3.8.1"
+        "class-variance-authority": "^0.7.1",
+        "clsx": "^2.1.1",
+        "framer-motion": "^12.38.0",
+        "lucide-react": "^1.11.0",
+        "react-bits": "^1.0.5",
+        "recharts": "^3.8.1",
+        "tailwind-merge": "^3.5.0"
     }
 }
