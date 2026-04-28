@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import BuyerLayout from '@/Layouts/BuyerLayout';
 import { Order, PageProps } from '@/types';
 import { useState } from 'react';
 
@@ -7,7 +7,12 @@ interface OrdersIndexProps extends PageProps {
     orders: {
         data: Order[];
         links: any[];
-        meta: any;
+        current_page: number;
+        per_page: number;
+        total: number;
+        from: number;
+        to: number;
+        last_page: number;
     };
     statusCounts: Record<string, number>;
     filters: {
@@ -82,9 +87,7 @@ export default function OrdersIndex({ orders, statusCounts, filters }: OrdersInd
     };
 
     return (
-        <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">My Orders</h2>}
-        >
+        <BuyerLayout>
             <Head title="My Orders" />
 
             <div className="py-12">
@@ -104,7 +107,7 @@ export default function OrdersIndex({ orders, statusCounts, filters }: OrdersInd
                                             : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                                     }`}
                                 >
-                                    All Orders {orders.meta.total > 0 && `(${orders.meta.total})`}
+                                    All Orders {orders.total > 0 && `(${orders.total})`}
                                 </button>
                                 {Object.entries(statusCounts).map(([status, count]) => (
                                     <button
@@ -294,7 +297,7 @@ export default function OrdersIndex({ orders, statusCounts, filters }: OrdersInd
                     )}
 
                     {/* Pagination */}
-                    {orders.meta.total > orders.meta.per_page && (
+                    {orders.total > orders.per_page && (
                         <div className="mt-8 flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                             <div className="flex flex-1 justify-between sm:hidden">
                                 {orders.links.find(link => link.label === '&laquo; Previous')?.url && (
@@ -317,9 +320,9 @@ export default function OrdersIndex({ orders, statusCounts, filters }: OrdersInd
                             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                                 <div>
                                     <p className="text-sm text-gray-700">
-                                        Showing <span className="font-medium">{orders.meta.from}</span> to{' '}
-                                        <span className="font-medium">{orders.meta.to}</span> of{' '}
-                                        <span className="font-medium">{orders.meta.total}</span> results
+                                        Showing <span className="font-medium">{orders.from}</span> to{' '}
+                                        <span className="font-medium">{orders.to}</span> of{' '}
+                                        <span className="font-medium">{orders.total}</span> results
                                     </p>
                                 </div>
                                 <div>
@@ -345,6 +348,6 @@ export default function OrdersIndex({ orders, statusCounts, filters }: OrdersInd
                     )}
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </BuyerLayout>
     );
 }

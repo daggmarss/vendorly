@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import BuyerLayout from '@/Layouts/BuyerLayout';
 import { User, Order } from '@/types';
+import { ShoppingBag, Package, Clock, DollarSign, ShoppingCart, Star, Search, MessageCircle, HelpCircle, FileText, Headphones } from 'lucide-react';
 
 interface BuyerDashboardProps {
     stats: {
@@ -28,13 +29,11 @@ export default function BuyerDashboard({ stats, recent_orders }: BuyerDashboardP
     };
 
     return (
-        <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Dashboard</h2>}
-        >
+        <BuyerLayout>
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="py-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <div className="mb-8">
@@ -365,6 +364,6 @@ export default function BuyerDashboard({ stats, recent_orders }: BuyerDashboardP
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </BuyerLayout>
     );
 }

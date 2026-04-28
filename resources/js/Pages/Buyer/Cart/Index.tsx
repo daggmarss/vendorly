@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import BuyerLayout from '@/Layouts/BuyerLayout';
 import { Cart, PageProps } from '@/types';
 import { useState } from 'react';
 
@@ -103,9 +103,7 @@ export default function CartIndex({ cartItems, cartSummary }: CartIndexProps) {
 
     if (cartItems.length === 0) {
         return (
-            <AuthenticatedLayout
-                header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Shopping Cart</h2>}
-            >
+            <BuyerLayout>
                 <Head title="Shopping Cart" />
 
                 <div className="py-12">
@@ -125,14 +123,12 @@ export default function CartIndex({ cartItems, cartSummary }: CartIndexProps) {
                         </div>
                     </div>
                 </div>
-            </AuthenticatedLayout>
+            </BuyerLayout>
         );
     }
 
     return (
-        <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Shopping Cart</h2>}
-        >
+        <BuyerLayout>
             <Head title="Shopping Cart" />
 
             <div className="py-12">
@@ -310,6 +306,6 @@ export default function CartIndex({ cartItems, cartSummary }: CartIndexProps) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </BuyerLayout>
     );
 }

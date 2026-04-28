@@ -1,20 +1,25 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import BuyerLayout from '@/Layouts/BuyerLayout';
 import { Product, Category, PageProps } from '@/types';
 import { useState, useEffect } from 'react';
 
 interface ProductsIndexProps extends PageProps {
-    products: {
+    products?: {
         data: Product[];
         links: any[];
-        meta: any;
+        current_page: number;
+        per_page: number;
+        total: number;
+        from: number;
+        to: number;
+        last_page: number;
     };
-    categories: Category[];
-    priceRange: {
+    categories?: Category[];
+    priceRange?: {
         min_price: number;
         max_price: number;
     };
-    filters: {
+    filters?: {
         search?: string;
         category?: string;
         min_price?: string;
@@ -25,17 +30,23 @@ interface ProductsIndexProps extends PageProps {
 }
 
 export default function ProductsIndex({ 
-    products, 
-    categories, 
-    priceRange, 
-    filters 
+    products = { data: [], links: [], current_page: 1, per_page: 12, total: 0, from: 0, to: 0, last_page: 1 }, 
+    categories = [], 
+    priceRange = { min_price: 0, max_price: 0 }, 
+    filters = {} 
 }: ProductsIndexProps) {
-    const [searchTerm, setSearchTerm] = useState(filters.search || '');
-    const [selectedCategory, setSelectedCategory] = useState(filters.category || '');
-    const [minPrice, setMinPrice] = useState(filters.min_price || '');
-    const [maxPrice, setMaxPrice] = useState(filters.max_price || '');
-    const [minRating, setMinRating] = useState(filters.min_rating || '');
-    const [sortBy, setSortBy] = useState(filters.sort || 'latest');
+    // Enhanced null checks
+    const safeProducts = products || { data: [], links: [], meta: { total: 0, per_page: 12 } };
+    const safeCategories = categories || [];
+    const safePriceRange = priceRange || { min_price: 0, max_price: 0 };
+    const safeFilters = filters || {};
+
+    const [searchTerm, setSearchTerm] = useState(safeFilters.search || '');
+    const [selectedCategory, setSelectedCategory] = useState(safeFilters.category || '');
+    const [minPrice, setMinPrice] = useState(safeFilters.min_price || '');
+    const [maxPrice, setMaxPrice] = useState(safeFilters.max_price || '');
+    const [minRating, setMinRating] = useState(safeFilters.min_rating || '');
+    const [sortBy, setSortBy] = useState(safeFilters.sort || 'latest');
 
     const applyFilters = () => {
         const params: any = {};
@@ -99,13 +110,11 @@ export default function ProductsIndex({
     };
 
     return (
-        <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Browse Products</h2>}
-        >
+        <BuyerLayout>
             <Head title="Products" />
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div className="py-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Search and Filters */}
                     <div className="mb-8 bg-white rounded-lg shadow-sm p-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
@@ -128,7 +137,7 @@ export default function ProductsIndex({
                                     className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 >
                                     <option value="">All Categories</option>
-                                    {categories.map((category) => (
+                                    {safeCategories.map((category) => (
                                         <option key={category.id} value={category.id}>
                                             {category.name}
                                         </option>
@@ -204,14 +213,14 @@ export default function ProductsIndex({
                     {/* Results Summary */}
                     <div className="mb-6">
                         <p className="text-gray-600">
-                            Showing {products.data.length} of {products.meta.total} products
+                            Showing {safeProducts?.data?.length || 0} of {safeProducts?.total || 0} products
                         </p>
                     </div>
 
                     {/* Product Grid */}
-                    {products.data.length > 0 ? (
+                    {safeProducts?.data?.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-                            {products.data.map((product) => (
+                            {safeProducts.data.map((product) => (
                                 <div key={product.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
                                     <Link href={route('buyer.products.show', product.id)}>
                                         <div className="aspect-square bg-gray-200 rounded-t-lg overflow-hidden">
@@ -287,20 +296,20 @@ export default function ProductsIndex({
                     )}
 
                     {/* Pagination */}
-                    {products.meta.total > products.meta.per_page && (
+                    {(safeProducts?.total || 0) > (safeProducts?.per_page || 12) && (
                         <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                             <div className="flex flex-1 justify-between sm:hidden">
-                                {products.links.find(link => link.label === '&laquo; Previous')?.url && (
+                                {safeProducts?.links?.find(link => link.label === '&laquo; Previous')?.url && (
                                     <Link
-                                        href={products.links.find(link => link.label === '&laquo; Previous')!.url}
+                                        href={safeProducts.links.find(link => link.label === '&laquo; Previous')!.url}
                                         className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     >
                                         Previous
                                     </Link>
                                 )}
-                                {products.links.find(link => link.label === 'Next &raquo;')?.url && (
+                                {safeProducts?.links?.find(link => link.label === 'Next &raquo;')?.url && (
                                     <Link
-                                        href={products.links.find(link => link.label === 'Next &raquo;')!.url}
+                                        href={safeProducts.links.find(link => link.label === 'Next &raquo;')!.url}
                                         className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     >
                                         Next
@@ -310,14 +319,14 @@ export default function ProductsIndex({
                             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                                 <div>
                                     <p className="text-sm text-gray-700">
-                                        Showing <span className="font-medium">{products.meta.from}</span> to{' '}
-                                        <span className="font-medium">{products.meta.to}</span> of{' '}
-                                        <span className="font-medium">{products.meta.total}</span> results
+                                        Showing <span className="font-medium">{safeProducts?.from || 0}</span> to{' '}
+                                        <span className="font-medium">{safeProducts?.to || 0}</span> of{' '}
+                                        <span className="font-medium">{safeProducts?.total || 0}</span> results
                                     </p>
                                 </div>
                                 <div>
                                     <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-                                        {products.links.map((link, index) => (
+                                        {safeProducts?.links?.map((link, index) => (
                                             <Link
                                                 key={index}
                                                 href={link.url || '#'}
@@ -338,6 +347,6 @@ export default function ProductsIndex({
                     )}
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </BuyerLayout>
     );
 }

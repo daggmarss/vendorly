@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import BuyerLayout from '@/Layouts/BuyerLayout';
 import { Product, PageProps } from '@/types';
 import { useState } from 'react';
 
@@ -12,6 +12,9 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
     const [isAddingToCart, setIsAddingToCart] = useState(false);
+
+    // Ensure images is always an array
+    const productImages = Array.isArray(product.images) ? product.images : [];
 
     const addToCart = async () => {
         setIsAddingToCart(true);
@@ -57,7 +60,7 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
     };
 
     return (
-        <AuthenticatedLayout>
+        <BuyerLayout>
             <Head title={product.name} />
 
             <div className="py-8">
@@ -91,9 +94,9 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                         {/* Product Images */}
                         <div>
                             <div className="aspect-square bg-gray-200 rounded-lg overflow-hidden mb-4">
-                                {product.images && product.images.length > 0 ? (
+                                {productImages.length > 0 ? (
                                     <img
-                                        src={`/storage/${product.images[selectedImage]}`}
+                                        src={`/storage/${productImages[selectedImage]}`}
                                         alt={product.name}
                                         className="w-full h-full object-cover"
                                     />
@@ -105,9 +108,9 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                             </div>
 
                             {/* Image Thumbnails */}
-                            {product.images && product.images.length > 1 && (
+                            {productImages.length > 1 && (
                                 <div className="flex space-x-2 overflow-x-auto">
-                                    {product.images.map((image, index) => (
+                                    {productImages.map((image, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setSelectedImage(index)}
@@ -136,10 +139,12 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                             {/* Rating */}
                             <div className="flex items-center space-x-2 mb-4">
                                 <div className="flex items-center">
-                                    {renderStars(product.rating_avg)}
+                                    {renderStars(product.rating_avg || 0)}
                                 </div>
                                 <span className="text-sm text-gray-600">
-                                    {product.rating_avg.toFixed(1)} ({product.rating_count} reviews)
+                                    {product.rating_avg && typeof product.rating_avg === 'number' 
+                                        ? product.rating_avg.toFixed(1) 
+                                        : '0.0'} ({product.rating_count || 0} reviews)
                                 </span>
                             </div>
 
@@ -314,9 +319,9 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                                                     {relatedProduct.name}
                                                 </h3>
                                                 <div className="flex items-center space-x-1 mb-2">
-                                                    {renderStars(relatedProduct.rating_avg)}
+                                                    {renderStars(relatedProduct.rating_avg || 0)}
                                                     <span className="text-sm text-gray-500">
-                                                        ({relatedProduct.rating_count})
+                                                        ({relatedProduct.rating_count || 0})
                                                     </span>
                                                 </div>
                                                 <p className="text-lg font-bold text-gray-900">
@@ -331,6 +336,6 @@ export default function ProductShow({ product, relatedProducts }: ProductShowPro
                     )}
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </BuyerLayout>
     );
 }

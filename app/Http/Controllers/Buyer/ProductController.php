@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,6 +17,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): Response
     {
+
         $query = Product::with(['seller', 'category', 'reviews'])
             ->where('is_active', true)
             ->where('stock_status', 'in_stock');
@@ -81,12 +83,33 @@ class ProductController extends Controller
             ->selectRaw('MIN(price) as min_price, MAX(price) as max_price')
             ->first();
 
-        return Inertia::render('Buyer/Products/Index', [
+        // Convert priceRange to array to avoid object serialization issues
+        $priceRangeArray = $priceRange ? [
+            'min_price' => (float) $priceRange->min_price,
+            'max_price' => (float) $priceRange->max_price,
+        ] : ['min_price' => 0, 'max_price' => 0];
+
+        // Add debugging
+        Log::info('Products count:', ['count' => $products->total()]);
+        Log::info('Categories count:', ['count' => $categories->count()]);
+        Log::info('Price range:', $priceRangeArray);
+
+        // Ensure we always return valid data structure
+        $responseData = [
             'products' => $products,
-            'categories' => $categories,
-            'priceRange' => $priceRange,
-            'filters' => $request->only(['search', 'category', 'min_price', 'max_price', 'min_rating', 'sort']),
+            'categories' => $categories ?? collect(),
+            'priceRange' => $priceRangeArray,
+            'filters' => (object) $request->only(['search', 'category', 'min_price', 'max_price', 'min_rating', 'sort']),
+        ];
+
+        Log::info('Response data structure:', [
+            'products_type' => gettype($responseData['products']),
+            'categories_type' => gettype($responseData['categories']),
+            'priceRange_type' => gettype($responseData['priceRange']),
+            'filters_type' => gettype($responseData['filters']),
         ]);
+
+        return Inertia::render('Buyer/Products/Index', $responseData);
     }
 
     /**

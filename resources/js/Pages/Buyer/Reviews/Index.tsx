@@ -1,12 +1,17 @@
 import { Head, Link } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import BuyerLayout from '@/Layouts/BuyerLayout';
 import { Review, PageProps } from '@/types';
 
 interface ReviewsIndexProps extends PageProps {
     reviews: {
         data: Review[];
         links: any[];
-        meta: any;
+        current_page: number;
+        per_page: number;
+        total: number;
+        from: number;
+        to: number;
+        last_page: number;
     };
 }
 
@@ -47,9 +52,7 @@ export default function ReviewsIndex({ reviews }: ReviewsIndexProps) {
     };
 
     return (
-        <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">My Reviews</h2>}
-        >
+        <BuyerLayout>
             <Head title="My Reviews" />
 
             <div className="py-12">
@@ -201,7 +204,7 @@ export default function ReviewsIndex({ reviews }: ReviewsIndexProps) {
                     )}
 
                     {/* Pagination */}
-                    {reviews.meta.total > reviews.meta.per_page && (
+                    {reviews.total > reviews.per_page && (
                         <div className="mt-8 flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                             <div className="flex flex-1 justify-between sm:hidden">
                                 {reviews.links.find(link => link.label === '&laquo; Previous')?.url && (
@@ -224,9 +227,9 @@ export default function ReviewsIndex({ reviews }: ReviewsIndexProps) {
                             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                                 <div>
                                     <p className="text-sm text-gray-700">
-                                        Showing <span className="font-medium">{reviews.meta.from}</span> to{' '}
-                                        <span className="font-medium">{reviews.meta.to}</span> of{' '}
-                                        <span className="font-medium">{reviews.meta.total}</span> results
+                                        Showing <span className="font-medium">{reviews.from}</span> to{' '}
+                                        <span className="font-medium">{reviews.to}</span> of{' '}
+                                        <span className="font-medium">{reviews.total}</span> results
                                     </p>
                                 </div>
                                 <div>
@@ -252,6 +255,6 @@ export default function ReviewsIndex({ reviews }: ReviewsIndexProps) {
                     )}
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </BuyerLayout>
     );
 }

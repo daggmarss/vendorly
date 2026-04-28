@@ -8,7 +8,6 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -66,7 +65,7 @@ class ReviewController extends Controller
     /**
      * Store a newly created review.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'order_item_id' => 'required|exists:order_items,id',
@@ -80,18 +79,14 @@ class ReviewController extends Controller
 
         // Ensure user owns this order item
         if ($orderItem->order->user_id !== $request->user()->id) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized action.'
-            ], 403);
+            return redirect()->back()
+                ->with('error', 'Unauthorized action.');
         }
 
         // Check if order is delivered
         if ($orderItem->order->status !== 'delivered') {
-            return response()->json([
-                'success' => false,
-                'message' => 'You can only review products from delivered orders.'
-            ], 400);
+            return redirect()->back()
+                ->with('error', 'You can only review products from delivered orders.');
         }
 
         // Check if review already exists
@@ -100,10 +95,8 @@ class ReviewController extends Controller
             ->first();
 
         if ($existingReview) {
-            return response()->json([
-                'success' => false,
-                'message' => 'You have already reviewed this product.'
-            ], 400);
+            return redirect()->route('buyer.reviews.edit', $existingReview)
+                ->with('info', 'You have already reviewed this product.');
         }
 
         $reviewImages = [];
@@ -131,11 +124,8 @@ class ReviewController extends Controller
         // Update product rating average
         $this->updateProductRating($orderItem->product_id);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Review submitted successfully!',
-            'review' => $review->load('user'),
-        ]);
+        return redirect()->route('buyer.reviews.index')
+            ->with('success', 'Review submitted successfully!');
     }
 
     /**

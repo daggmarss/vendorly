@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import BuyerLayout from '@/Layouts/BuyerLayout';
 import { OrderItem, PageProps } from '@/types';
 
 interface ReviewableProps extends PageProps {
@@ -12,9 +12,7 @@ interface ReviewableProps extends PageProps {
 
 export default function Reviewable({ reviewableItems }: ReviewableProps) {
     return (
-        <AuthenticatedLayout
-            header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Write Reviews</h2>}
-        >
+        <BuyerLayout>
             <Head title="Write Reviews" />
 
             <div className="py-12">
@@ -28,7 +26,7 @@ export default function Reviewable({ reviewableItems }: ReviewableProps) {
                     </div>
 
                     {/* Reviewable Items */}
-                    {reviewableItems.data.length > 0 ? (
+                    {reviewableItems?.data && reviewableItems.data.length > 0 ? (
                         <div className="space-y-6">
                             {reviewableItems.data.map((item) => (
                                 <div key={item.id} className="bg-white rounded-lg shadow-sm border p-6">
@@ -93,7 +91,9 @@ export default function Reviewable({ reviewableItems }: ReviewableProps) {
                                                 <div>
                                                     <p className="text-sm text-gray-600">Total Paid</p>
                                                     <p className="font-medium text-gray-900">
-                                                        ${item.total_price.toFixed(2)}
+                                                        ${item.total_price && typeof item.total_price === 'number' 
+                                                            ? item.total_price.toFixed(2) 
+                                                            : '0.00'}
                                                     </p>
                                                 </div>
                                             </div>
@@ -139,20 +139,20 @@ export default function Reviewable({ reviewableItems }: ReviewableProps) {
                     )}
 
                     {/* Pagination */}
-                    {reviewableItems.meta.total > reviewableItems.meta.per_page && (
+                    {reviewableItems?.meta?.total && reviewableItems.meta.total > (reviewableItems.meta.per_page || 10) && (
                         <div className="mt-8 flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                             <div className="flex flex-1 justify-between sm:hidden">
-                                {reviewableItems.links.find(link => link.label === '&laquo; Previous')?.url && (
+                                {reviewableItems?.links?.find(link => link.label === '&laquo; Previous')?.url && (
                                     <Link
-                                        href={reviewableItems.links.find(link => link.label === '&laquo; Previous')!.url}
+                                        href={reviewableItems?.links?.find(link => link.label === '&laquo; Previous')?.url || '#'}
                                         className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     >
                                         Previous
                                     </Link>
                                 )}
-                                {reviewableItems.links.find(link => link.label === 'Next &raquo;')?.url && (
+                                {reviewableItems?.links?.find(link => link.label === 'Next &raquo;')?.url && (
                                     <Link
-                                        href={reviewableItems.links.find(link => link.label === 'Next &raquo;')!.url}
+                                        href={reviewableItems?.links?.find(link => link.label === 'Next &raquo;')?.url || '#'}
                                         className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                                     >
                                         Next
@@ -162,14 +162,14 @@ export default function Reviewable({ reviewableItems }: ReviewableProps) {
                             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                                 <div>
                                     <p className="text-sm text-gray-700">
-                                        Showing <span className="font-medium">{reviewableItems.meta.from}</span> to{' '}
-                                        <span className="font-medium">{reviewableItems.meta.to}</span> of{' '}
-                                        <span className="font-medium">{reviewableItems.meta.total}</span> results
+                                        Showing <span className="font-medium">{reviewableItems?.meta?.from || 0}</span> to{' '}
+                                        <span className="font-medium">{reviewableItems?.meta?.to || 0}</span> of{' '}
+                                        <span className="font-medium">{reviewableItems?.meta?.total || 0}</span> results
                                     </p>
                                 </div>
                                 <div>
                                     <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm">
-                                        {reviewableItems.links.map((link, index) => (
+                                        {reviewableItems?.links?.map((link, index) => (
                                             <Link
                                                 key={index}
                                                 href={link.url || '#'}
@@ -211,6 +211,6 @@ export default function Reviewable({ reviewableItems }: ReviewableProps) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </BuyerLayout>
     );
 }
