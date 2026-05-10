@@ -238,7 +238,7 @@ cd frontend
 npm install
 npm run dev
 ```
-
+z
 ---
 
 ## 🔐 Environment Variables

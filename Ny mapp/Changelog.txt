@@ -1,0 +1,190 @@
+3.0.3 (25 nov. 2025)
+- Added support for .apkm and .xapk with APK+OBB
+- Fixed il2cpp_header_to_ghidra.py
+
+3.0.2 (2 dec. 2024)
+- Fixed a critical vulnerability by removing DotNetZip library and transition to System.IO.Compression
+
+3.0.1 (26 july 2024)
+- Fixed issue dumping wrong arch when dumping from APK/Split APK
+
+3.0.0 (13 july 2024)
+- Moved to ModernWpf, the free GUI library, and got rid of paid Bunifu UI
+- Support Metadata 31 (Thanks Perfare)
+- Improve split APK support
+- Added more scripts
+- No longer embed .NET runtime. The .NET 6.0 Desktop Runtime (Windows) is now required to be installed on your computer: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+
+2.1.0 (10 june 2023)
+- x86_64 support for Android .so file
+- Fixed IPA support
+- Support dropping multiple files to dump
+- Update link replaced to Github link so they can see an overview what has changed
+
+2.0.1 (5 apr. 2023)
+- Provide both x86 and x64. If your system is 64-bit, use x64 exe to avoid out of memory error
+
+2.0.0 (27 mar. 2023)
+- Updated Il2CppDumper base code to 6.7.40
+- Migrated to .NET 7.0. The exe file will be quite larger
+
+1.8.0 (16 feb. 2023)
+- Updated Il2CppDumper base code to 6.7.32
+- Added Hopper Disassembler Script
+- Bypassed anti-virus false positives
+
+1.7.0 (30 aug. 2022)
+- Updated base code to 6.7.25
+
+1.6.0 (13 feb. 2022)
+- Updated base code to 6.7.6
+
+1.5.3 (2020-10-20)
+- Can now dump dummydll even generating struct fails
+- Removed Mach-O switch. Nobody modding 32-bit iOS game anymore
+- Added Android arch dropdown
+
+1.5.2 (2020-09-16)
+- Don't copy scripts when dumping fails
+- Orange text instead red text so it's easier to read
+- Fixed metadata dump wrong address input (Untested because i'm not sure how it works)
+
+1.5.1 (2020-07-03)
+- Updated to Il2CppDumper 6.6.3
+--- Optimize Metadata processing above v27
+- Fix file copy bug
+
+1.5.0 (2020-05-12)
+- Updated to Il2CppDumper 6.6.2 which fixes dump error on some games
+- Using xml for config instead registry
+- Auto copy python scripts to dump location which saves you time from having to navigate to Il2CppDumper location (Thanks T5ive)
+- Added about window
+
+1.4.0 (2020-03-20)
+- Updated to Il2CppDumper v6.5.3 which fixes dump error for 2019.4.22f1
+- Added running as administrator detection to warn you that drag and drop will not work
+
+1.3.4 (2020-08-26)
+- Fixed DummyDll folder that become read-only after dump
+
+1.3.2 (2020-08-12)
+- Updated Il2CppDumper source to 6.4.4, fix for dumping older metadata version
+- Removed Il2CppInspector-cli.exe. Use the official Il2CppInspector with CLI/GUI version if you want to https://github.com/djkaty/Il2CppInspector
+- Updated .NET Framework to 4.7.2
+- Added option to disable/enable binary file extraction on auto dump
+- Removed global-metadata.dat extraction on auto dump
+- Fixed offsets shown as decimal
+- Executeable is now "Any CPU", means it have both x86 and x64 native support
+- Log output cleanup
+
+This project is now open source: 
+
+1.3.1 (2020-04-19)
+- Upgraded to Il2CppDumper 6.2.1
+- Fixed dump.cs being located in wrong location
+- Fixed non-il2cpp game detection
+- Removed binary file extension check upon drag and drop. It is unnecessary since more binaries are getting supported 
+- Other improvements
+
+1.3.0 (2020-03-07)
+- Upgraded to Il2CppDumper 6.1.1
+- Added Il2CppInspector-cli 2.1 by djkaty
+- Added dumper mode to switch between Il2CppDumper and Il2CppInspector-cli
+- Removed modes, it is no longer required
+- Removed unity version, it is no longer required
+- PlayStation 4 .prx files support (For Il2CppInspector only)
+- APK: Fixed dumping split apks again
+- IPA: Support auto dumping UnityFramework (Payload/(appname).app/Frameworks/UnityFramework.framework/UnityFramework)
+- Some other fixes and code cleanups
+
+Special thanks to djkaty who helped me fixing dumping issue :)
+
+1.2.1 (2020-01-17)
+- Fixed index error when auto dumping some .ipa file
+- Fixed dumping split apk issue
+- Logs no longer load on launch to keep it clean (I don't feel the point to always load it anymore)
+- Auto create config.json if not exist
+- Added .ipa for cmd arguments (il2cppdumpergui.exe [file path])
+- Added 64-bit executeable (Maybe useful for Wine64 on macOS 10.15.x Catalina?)
+- Auto set path if auto dump fails
+
+1.2.0 (2019-12-20)
+- Updated to Il2CppDumper 5.0.4
+- Switch modes shortcuts for WineHQ (macOS/Linux users). Press CTRL + [1, 2, 3, 4] to switch modes 
+- Fix input dump address
+- Logging in runtime now supported
+- Faster zipping and dumping
+- Form resized to fit with some smaller screens
+- Using Costura to embed dlls (Anti-virus might hate it a lot)
+- Attempt to bypass false positive again but 4 / 72 on VirusTotal https://www.virustotal.com/gui/file/8bcefab23c1693f135c208e2f94bad025312d0f7c98817fe8b961ca3c3f281c4/detection
+
+1.1.4 (2019-09-11)
+- Updated to Il2CppDumper 4.6.0 with Unity 2019 support for Auto dump plus
+- Fix IPA auto dump issues. Sorry it was messed up after adding split APK support
+- Added 1px border window to avoid confusion with other windows with dark theme
+- Added dumped il2cpp detection support. I'm not sure how it works to be honest, I just add what's available in the dumper
+
+1.1.3 (2019-09-02)
+- Bypass false positive. Gen:Variant.Ursu does not make sense at all.
+
+There are still 3 engine that detect it. https://www.virustotal.com/gui/file/5ea99114932b46e9b663f4547df5cce177011ed947b252db772051d5e1ee1213/detection
+Sorry nothing i can do, anti-virus can go f*** themself
+
+1.1.2 (2019-08-24)
+- Support split apks. Drag base.apk and split_config apk or opposite to start dumping
+
+1.1.1 (2019-06-24)
+- Updated Il2CppDumper to 4.5.11. Warn that auto dump will not work on Unity 2019 version and above
+- Fix error log not showing
+
+1.1.01 (2019-06-12)
+- Fixed a bug that caused dumped file to be owerwritten while auto dumping
+- Fixed hanging while dumping some iOS games
+
+1.1.0 (2019-06-11)
+- Mach-O 64-bit mode is now default
+- Support drag and drop IPA file
+- Support auto dumping decrypted IPA file
+
+1.0.9 (2019-06-07)
+- Updated Il2CppDumper to 4.5.8
+- Will only create folders if any lib architecture exist
+- Extract il2cpp.so to each folder
+- Removed useless log infomation
+- Added input unity version field
+- Auto get unity version when dragging any asset file or APK file
+
+1.0.8 (2019-03-29)
+- Updated Il2CppDumper to 4.2.5-beta, with support of NSO file (Nintendo Switch)
+- Can drag and drop DLL (GameAssembly.dll of PC game) and NSO file
+
+1.0.7 (2019-02-20)
+- Updated Il2CppDumper to 4.2.1
+
+1.0.6 (2019-01-02)
+- Updated Il2CppDumper to "commit 41ac324"
+- Fixed dumping wrong offset
+
+1.0.5 (2018-10-18)
+- Updated Il2CppDumper to 3.3.13, with code improvements, added PE stuff
+
+1.0.4 (2018-07-01)
+- Updated Il2CppDumper to 3.2.4
+- Added .apk dropping and CMD arguments to start dump automation. CMD args are "il2cppdumper.exe <path of apk file>"
+- Font fix
+
+1.0.3-1 (2018-03-29)
+- Hotfix
+
+1.0.3 (2018-03-26)
+- Updated Il2CppDumper to 3.2.0, with new feature, X86 fix and DummyDLL Attribute
+
+1.0.2 (2018-01-23)
+- Updated Il2CppDumper to 3.1.6, with new feature, Symbol auto mode (Elf only)
+
+1.0.1 (2018-01-06)
+- Updated Il2CppDumper to v3.0.12, with new features, DummyDll and Plus auto mode 
+- Fixed buttons that were disabled for no reason
+
+1.0 (2017-12-20)
+- First release
